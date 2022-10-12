@@ -10,16 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CPP00_PHONEBOOK_HPP
-#define CPP00_PHONEBOOK_HPP
+#pragma once
 #include "Contact.hpp"
 
 class PhoneBook
 {
 public:
+    PhoneBook();
+    ~PhoneBook();
+    void add(Contact new_contact);
+    void print_contact(void);
+    const Contact& search(int i);
 private:
     const Contact _contacts[8];
     int _size = 0;
 };
-
-#endif
