@@ -18,10 +18,13 @@ class PhoneBook
 public:
     PhoneBook();
     ~PhoneBook();
+    PhoneBook operator=(const PhoneBook& other);
     void add(Contact new_contact);
-    void print_contact(void);
+    void print_contacts(void);
     const Contact& search(int i);
+    const Contact *get_contacts(void) const;
+    int get_size(void) const;
 private:
-    const Contact _contacts[8];
-    int _size = 0;
+    Contact _contacts[8];
+    int _size;
 };

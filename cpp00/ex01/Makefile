@@ -12,13 +12,19 @@
 
 # Variables
 CC		=	g++
-CFLAGS	=	-Wall -Wextra -Werror -g -std=c++98
+CFLAGS	=	-Wall -Wextra -Werror -std=c++98
 IFLAGS	=	-I includes
-NAME	=	megaphone
+DFLAGS	=	-g -DDEBUG
+ifeq ($(findstring debug, $(MAKECMDGOALS)), debug)
+	CFLAGS	+=	$(DFLAGS)
+endif
+NAME	=	PhoneBook
 DEP_PATH=	deps/
 OBJ_PATH=	objs/
 SRC_PATH=	$(shell find srcs -type d)
-SRCS	=	megaphone.cpp
+SRCS	=	Contact.cpp \
+			PhoneBook.cpp \
+			main.cpp
 OBJS	=	$(addprefix $(OBJ_PATH), $(SRCS:.cpp=.o))
 DEPS	=	$(addprefix $(DEP_PATH), $(SRCS:.cpp=.d))
 vpath %.cpp $(foreach rep, $(SRC_PATH), $(rep))
@@ -45,4 +51,6 @@ fclean	:	clean
 
 re		:	fclean all
 
-.PHONY	:	all clean fclean re
+debug	:	re
+
+.PHONY	:	all clean fclean re debug
