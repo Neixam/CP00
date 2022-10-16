@@ -71,36 +71,37 @@ std::ostream& operator<<(std::ostream& os, const Contact& c)
 {
     return (os << std::setw(10) << colonise(c.get_first_name()) << "|"
         << std::setw(10) << colonise(c.get_last_name()) << "|"
-        << std::setw(10) << colonise(c.get_nick_name()) << "|"
-        << std::setw(10) << colonise(c.get_phone_number()));
+        << std::setw(10) << colonise(c.get_nick_name()));
 }
 
 std::istream& operator>>(std::istream& is, Contact& contact)
 {
-    std::string fn;
-    std::string ln;
-    std::string nn;
-    std::string pn;
-    std::string ds;
+    static const struct
+    {
+        std::string fields;
 
-    std::cout << "Enter a first name: " << std::flush;
-    is >> fn;
-    std::cout << "Enter a last name: " << std::flush;
-    is >> ln;
-    std::cout << "Enter a nick name: " << std::flush;
-    is >> nn;
-    std::cout << "Enter a phone number: " << std::flush;
-    is >> pn;
+        void (Contact::*setter)(std::string);
+    }   setters[5] =
+            {
+                { "a first name", &Contact::set_first_name },
+                { "a last name", &Contact::set_last_name },
+                { "a nickname", &Contact::set_nick_name },
+                { "a phone number", &Contact::set_phone_number },
+                { "your darkest secret", &Contact::set_darkest_secret }
+            };
+    int i;
+
     is.ignore();
-    std::cout << "Enter your darkest secret: " << std::flush;
-    do
-        std::getline(is, ds);
-    while (ds == "");
-    contact.set_first_name(fn);
-    contact.set_last_name(ln);
-    contact.set_nick_name(nn);
-    contact.set_phone_number(pn);
-    contact.set_darkest_secret(ds);
+    for (i = 0; i < 5; i++)
+    {
+        std::string in;
+        do
+        {
+            std::cout << "Enter " << setters[i].fields << ": " << std::flush;
+            std::getline(is, in);
+        } while (in == "");
+        (contact.*setters[i].setter)(in);
+    }
     return (is);
 }
 

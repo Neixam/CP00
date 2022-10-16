@@ -11,8 +11,10 @@
 /* ************************************************************************** */
 
 #include <iostream>
+#include <iomanip>
 #include "PhoneBook.hpp"
 #include "Contact.hpp"
+
 
 void    PhoneBook::add(Contact new_contact)
 {
@@ -26,7 +28,7 @@ void    PhoneBook::add(Contact new_contact)
 void    PhoneBook::print_contacts(void)
 {
     for (int i = 0; i < _size; i++)
-        std::cout << _contacts[i] << std::endl;
+        std::cout << std::setw(10) << i + 1 << "|" << _contacts[i] << std::endl;
 }
 
 
@@ -55,7 +57,7 @@ PhoneBook::~PhoneBook()
 }
 #endif
 
-const Contact *PhoneBook::get_contacts(void) const
+const Contact   *PhoneBook::get_contacts(void) const
 {
     return (_contacts);
 }
@@ -65,7 +67,7 @@ int PhoneBook::get_size(void) const
     return (_size);
 }
 
-PhoneBook PhoneBook::operator=(const PhoneBook& other)
+PhoneBook   PhoneBook::operator=(const PhoneBook& other)
 {
     if (this == &other)
         return (*this);
