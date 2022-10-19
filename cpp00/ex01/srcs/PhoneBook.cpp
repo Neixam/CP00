@@ -15,8 +15,7 @@
 #include "PhoneBook.hpp"
 #include "Contact.hpp"
 
-
-void    PhoneBook::add(Contact new_contact)
+void    PhoneBook::add(const Contact& new_contact)
 {
     if (this->_size != 8)
         this->_size++;
@@ -30,7 +29,6 @@ void    PhoneBook::print_contacts(void)
     for (int i = 0; i < _size; i++)
         std::cout << std::setw(10) << i + 1 << "|" << _contacts[i] << std::endl;
 }
-
 
 #ifndef DEBUG
 
@@ -67,7 +65,7 @@ int PhoneBook::get_size(void) const
     return (_size);
 }
 
-PhoneBook   PhoneBook::operator=(const PhoneBook& other)
+PhoneBook&   PhoneBook::operator=(const PhoneBook& other)
 {
     if (this == &other)
         return (*this);
@@ -75,4 +73,25 @@ PhoneBook   PhoneBook::operator=(const PhoneBook& other)
         this->_contacts[i] = other.get_contacts()[i];
     this->_size = other.get_size();
     return (*this);
+}
+
+void PhoneBook::print_contact(int index)
+{
+    if (index < 1 || index > _size)
+    {
+        std::cout << index << ":  bad index" << std::endl;
+        return ;
+    }
+    std::cout << _contacts[index - 1].get_first_name() << std::endl;
+    std::cout << _contacts[index - 1].get_last_name() << std::endl;
+    std::cout << _contacts[index - 1].get_nick_name() << std::endl;
+    std::cout << _contacts[index - 1].get_phone_number() << std::endl;
+    std::cout << _contacts[index - 1].get_darkest_secret() << std::endl;
+}
+
+PhoneBook::PhoneBook(const PhoneBook &phoneBook)
+{
+    _size = phoneBook.get_size();
+    for (int i = 0; i < phoneBook.get_size(); i++)
+        _contacts[i] = phoneBook.get_contacts()[i];
 }

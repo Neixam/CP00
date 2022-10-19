@@ -48,7 +48,7 @@ Contact::~Contact()
 }
 #endif
 
-Contact Contact::operator=(const Contact& other)
+Contact& Contact::operator=(const Contact& other)
 {
     if (this == &other)
         return (*this);
@@ -79,8 +79,7 @@ std::istream& operator>>(std::istream& is, Contact& contact)
     static const struct
     {
         std::string fields;
-
-        void (Contact::*setter)(std::string);
+        void (Contact::*setter)(const std::string&);
     }   setters[5] =
             {
                 { "a first name", &Contact::set_first_name },
@@ -89,17 +88,16 @@ std::istream& operator>>(std::istream& is, Contact& contact)
                 { "a phone number", &Contact::set_phone_number },
                 { "your darkest secret", &Contact::set_darkest_secret }
             };
-    int i;
 
-    is.ignore();
-    for (i = 0; i < 5; i++)
+    for (int i = 0; i < 5; i++)
     {
         std::string in;
         do
         {
             std::cout << "Enter " << setters[i].fields << ": " << std::flush;
-            std::getline(is, in);
-        } while (in == "");
+            if (!std::getline(is, in))
+                return (is);
+        } while (in.empty());
         (contact.*setters[i].setter)(in);
     }
     return (is);
@@ -130,27 +128,36 @@ std::string Contact::get_darkest_secret(void) const
     return (this->_darkest_secret);
 }
 
-void Contact::set_first_name(std::string fn)
+void Contact::set_first_name(const std::string& fn)
 {
     this->_first_name = fn;
 }
 
-void Contact::set_last_name(std::string ln)
+void Contact::set_last_name(const std::string& ln)
 {
     this->_last_name = ln;
 }
 
-void Contact::set_nick_name(std::string nn)
+void Contact::set_nick_name(const std::string& nn)
 {
     this->_nick_name = nn;
 }
 
-void Contact::set_phone_number(std::string pn)
+void Contact::set_phone_number(const std::string& pn)
 {
     this->_phone_number = pn;
 }
 
-void Contact::set_darkest_secret(std::string ds)
+void Contact::set_darkest_secret(const std::string& ds)
 {
     this->_darkest_secret = ds;
+}
+
+Contact::Contact(const Contact &contact)
+{
+    _first_name = contact.get_first_name();
+    _last_name = contact.get_last_name();
+    _nick_name = contact.get_nick_name();
+    _phone_number = contact.get_phone_number();
+    _darkest_secret = contact.get_darkest_secret();
 }

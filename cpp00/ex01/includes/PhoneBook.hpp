@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #pragma once
-#ifndef __PHONEBOOK_HPP__
-#define __PHONEBOOK_HPP__
+#ifndef PHONEBOOK_HPP
+#define PHONEBOOK_HPP
 #include "Contact.hpp"
 
 class PhoneBook
@@ -20,10 +20,12 @@ class PhoneBook
 public:
     PhoneBook();
     ~PhoneBook();
-    PhoneBook       operator=(const PhoneBook& other);
-    void            add(Contact new_contact);
+    PhoneBook(const PhoneBook& phoneBook);
+    PhoneBook&      operator=(const PhoneBook& other);
+    void            add(const Contact& new_contact);
     void            print_contacts(void);
     const Contact   *get_contacts(void) const;
+    void            print_contact(int index);
     int             get_size(void) const;
 private:
     Contact _contacts[8];
