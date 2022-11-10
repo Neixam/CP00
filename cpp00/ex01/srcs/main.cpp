@@ -53,7 +53,7 @@ int main(void)
         }
         else if (in == "EXIT")
             return (0);
-        else
+        else if (!in.empty())
             std::cout << in << ": command doesn't exist" << std::endl;
     }
 }
